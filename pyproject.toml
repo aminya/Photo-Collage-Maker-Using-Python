@@ -1,0 +1,11 @@
+[project]
+name = "photo-collage-maker"
+version = "0.1.0"
+description = "Simple photo collage maker"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "numpy>=2.3.4",
+    "pillow>=12.0.0",
+    "streamlit>=1.51.0",
+]
