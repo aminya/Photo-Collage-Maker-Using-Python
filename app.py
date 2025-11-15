@@ -2,6 +2,8 @@ import streamlit as st
 from PIL import Image
 import numpy as np
 
+Image.MAX_IMAGE_PIXELS = 933120000
+
 def make_collage(images, rows, cols):
     # Resize images to be the same size
     resized_images = []
