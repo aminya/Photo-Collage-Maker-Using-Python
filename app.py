@@ -27,6 +27,18 @@ def make_collage(images: list[ImageFile], rows: int, cols: int) -> Image.Image:
 
     return collage
 
+def download_collage_png(collage: Image.Image):
+    buf = io.BytesIO()
+    collage.save(buf, format='PNG', compress_level=7)
+    buf.seek(0)
+    return buf
+
+def download_collage_jpeg(collage: Image.Image):
+    buf = io.BytesIO()
+    collage.save(buf, format='JPEG', quality=100)
+    buf.seek(0)
+    return buf
+
 def main():
     st.set_page_config(page_title='Photo Collage Maker')
     st.title("Photo Collage Maker")
@@ -48,6 +60,7 @@ def main():
 
     rows = st.selectbox("Number of rows", options=range(1, 100))
     cols = st.selectbox("Number of columns", options=range(1, 100))
+    format = st.selectbox("Format", options=["JPEG", "PNG"])
 
     if uploaded_files:
         images = [Image.open(file) for file in uploaded_files]
@@ -61,17 +74,26 @@ def main():
                 # Display the collage
                 st.image(collage, width='content')
 
-                # Save collage to bytes buffer with maximum quality as PNG (lossless)
-                buf = io.BytesIO()
-                collage.save(buf, format='PNG', compress_level=9)
-                buf.seek(0)
+                if format == "PNG":
+                    st.write("Generating PNG...")
+                    data = download_collage_png(collage)
+                    st.download_button(
+                        label="Download PNG",
+                        data=data,
+                        file_name="collage.png",
+                        mime="image/png",
+                    )
+                elif format == "JPEG":
+                    st.write("Generating JPEG...")
+                    data = download_collage_jpeg(collage)
+                    st.download_button(
+                        label="Download JPEG",
+                        data=data,
+                        file_name="collage.jpeg",
+                        mime="image/jpeg",
+                    )
 
-                st.download_button(
-                    label="Download High-Quality Collage",
-                    data=buf,
-                    file_name="collage_high_quality.png",
-                    mime="image/png"
-                )
+                st.success("Photo collage created successfully!")
         else:
             st.warning(f"Please select at least {rows*cols} images for a {rows}x{cols} collage")
 
