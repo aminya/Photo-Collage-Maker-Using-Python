@@ -43,8 +43,8 @@ st.write("Upload your images and select the number of rows and columns for your 
 
 uploaded_files = st.file_uploader("Choose images", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
 
-rows = st.selectbox("Number of rows", options=[1, 2, 3, 4, 5])
-cols = st.selectbox("Number of columns", options=[1, 2, 3, 4, 5])
+rows = st.selectbox("Number of rows", options=range(1, 100))
+cols = st.selectbox("Number of columns", options=range(1, 100))
 
 if uploaded_files:
     images = [Image.open(file) for file in uploaded_files]
